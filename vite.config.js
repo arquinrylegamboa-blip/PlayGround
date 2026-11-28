@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite'
 
+const allowedHosts = ['.omgithub.com']
+
 export default defineConfig({
-  preview: {
-    allowedHosts: ['live-46091931865-1.omgithub.com']
-  }
+  server: { allowedHosts },
+  preview: { allowedHosts },
 })
