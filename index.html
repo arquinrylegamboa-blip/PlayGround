@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#05070a" />
+    <meta name="description" content="Titan Box — a playable MonsterVerse kaiju sandbox with destructible cities, titan combat, AI battles, weather and free roam." />
+    <title>TITAN BOX // MonsterVerse Sandbox</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2305070a'/%3E%3Cpath d='M10 48 20 16l8 20 8-20 8 20 8-20 4 32z' fill='%23d7b46a'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game" aria-label="3D kaiju battlefield"></canvas>
+      <div class="screen-fx" aria-hidden="true">
+        <div class="fx-vignette"></div>
+        <div class="fx-grain"></div>
+        <div class="fx-scanline"></div>
+        <div id="damage-flash"></div>
+      </div>
+      <div id="ui"></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
