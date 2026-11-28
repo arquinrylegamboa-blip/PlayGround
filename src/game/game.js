@@ -569,11 +569,15 @@ export class Game {
       const cur = this.player ? alive.indexOf(this.player) : -1;
       next = alive[(cur + 1) % alive.length];
     }
-    if (next === this.player) return;
+    if (next === this.player && !this.spectate) return;
     if (this.player) this.player.setPlayer(false);
     this.player = next;
+    this.spectate = false;
+    this.settings.set('disableControl', false, true);
     next.setPlayer(true);
+    this.cameraRig.spectate = false;
     this.cameraRig.snapTo(next, this.input);
+    this.ui?.applySettingsView?.();
     this.ui?.toast(`NOW CONTROLLING ${next.name.toUpperCase()}`, 'info');
     this.updateObjective();
   }
@@ -581,8 +585,20 @@ export class Game {
   setSpectate(on) {
     this.spectate = !!on;
     this.cameraRig.spectate = this.spectate;
-    if (this.player) { this.player.setPlayer(false); this.player.ai = this.player.ai || null; }
-    if (!this.spectate && this.player) this.player.setPlayer(true);
+    if (this.spectate) {
+      if (this.player) this.player.setPlayer(false);
+      this.player = null;
+      for (const m of this.monsters) m.setAI(true);
+    } else if (this.player) {
+      this.player.setPlayer(true);
+    } else {
+      const next = this.monsters.find(m => !m.dead);
+      if (next) {
+        this.player = next;
+        next.setPlayer(true);
+        this.cameraRig.snapTo(next, this.input);
+      }
+    }
     this.ui?.toast(this.spectate ? 'SPECTATOR MODE' : 'CONTROL RESTORED', 'info');
   }
 
@@ -598,7 +614,8 @@ export class Game {
     if (!id) return;
     const p = this.spawnPoint(130);
     const team = opts.team ?? 1;
-    const m = this.addMonster(id, { team, x: p.x, z: p.z, yaw: Math.atan2(-(this.player?.root.position.x - p.x || 0), -(this.player?.root.position.z - p.z || -1)), ai: opts.ai !== false });
+    const forceAI = this.spectate || opts.ai !== false;
+    const m = this.addMonster(id, { team, x: p.x, z: p.z, yaw: Math.atan2(-(this.player?.root.position.x - p.x || 0), -(this.player?.root.position.z - p.z || -1)), ai: forceAI });
     this.effects.dust(m.root.position.clone(), m.radius, 20, 0xa89a86);
     this.ui?.toast(`${m.name.toUpperCase()} SPAWNED`, 'info');
     if (this.ui?.refreshSandbox) this.ui.refreshSandbox(this);

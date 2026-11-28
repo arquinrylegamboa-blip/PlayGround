@@ -98,6 +98,7 @@ function applySettings(key) {
   audio.setMusic(settings.get('music'));
   if (key === 'hud') ui.applyHudVisibility();
   if (key === 'quality') ui.applySettingsView();
+  if (key === 'disableControl') game.setSpectate(settings.get('disableControl'));
 }
 
 ui.onSettingsChange = (key) => applySettings(key);

@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS = {
   fpsLimit: 60,
   hud: true,
   motionBlur: false,
+  disableControl: false,
 };
 
 const QUALITY_PRESETS = {

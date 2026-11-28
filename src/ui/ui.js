@@ -364,6 +364,7 @@ export class UI {
             <label class="switch"><input type="checkbox" data-setting="sound" /><i></i><span>SOUND FX</span></label>
             <label class="switch"><input type="checkbox" data-setting="music" /><i></i><span>MUSIC / AMBIENCE</span></label>
             <label class="switch"><input type="checkbox" data-setting="hud" /><i></i><span>HUD</span></label>
+            <label class="switch"><input type="checkbox" data-setting="disableControl" /><i></i><span>DISABLE CONTROLLING KAIJUS</span></label>
           </div>
         </div>
         <div class="modal-foot"><span>CHANGES APPLY LIVE</span><button class="btn btn-primary" data-close>DONE</button></div>
@@ -640,6 +641,7 @@ export class UI {
         weather: this.weather,
         time: this.time,
         intro: true,
+        spectate: !!this.settings.get('disableControl'),
         title: `${m.short} VS ${rival.short}`,
       };
     }
@@ -651,6 +653,7 @@ export class UI {
       weather: this.weather,
       time: this.time,
       intro: false,
+      spectate: !!this.settings.get('disableControl'),
       title: this.mode === 'sandbox' ? 'SANDBOX' : '',
     };
   }
