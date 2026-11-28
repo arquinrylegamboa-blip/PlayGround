@@ -1098,6 +1098,7 @@ export function createMonsterModel(def) {
   visual.scale.setScalar(scale);
   group.add(visual);
   const rig = built.rig;
+  rig.def = def;
   rig.scale = scale;
   rig.visual = visual;
   rig.outer = group;
