@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#071018" />
+  <title>MONSTERVERSE BOX — Kaiju Sandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game"></div>
+  <div class="grain"></div>
+  <header class="topbar"><a class="brand" href="#"><span class="brand-mark">M</span><span>MONSTERVERSE <b>BOX</b></span></a><div class="top-status"><i></i> SIMULATION ONLINE <span id="clock">21:42</span></div><button id="menu-toggle" class="icon-btn" aria-label="Menu">☰</button></header>
+  <main id="main-menu" class="menu-screen">
+    <div class="menu-copy"><div class="eyebrow"><span></span> TITAN CONTAINMENT // SECTOR 09</div><h1>THE CITY<br>IS <em>YOURS.</em></h1><p>Enter the arena. Choose your titan. Leave nothing standing.</p><div class="menu-actions"><button class="primary" data-mode="free">ENTER THE CITY <span>↗</span></button><button class="quiet" data-mode="battle">SET UP A BATTLE <span>→</span></button></div><div class="menu-foot"><span>HONG KONG · 02:17 AM</span><span>01 / 04 — THE AWAKENING</span></div></div>
+    <nav class="main-nav"><button data-mode="free"><small>01</small> FREE ROAM <span>↗</span></button><button data-mode="battle"><small>02</small> BATTLE ARENA <span>↗</span></button><button data-mode="sandbox"><small>03</small> SANDBOX <span>↗</span></button><button data-panel="collection"><small>04</small> TITAN INDEX <span>↗</span></button><button data-panel="settings"><small>05</small> SETTINGS <span>↗</span></button></nav>
+    <div class="menu-side-note">AN UNOFFICIAL FAN-MADE SANDBOX<br>NOT AFFILIATED WITH LEGENDARY ENTERTAINMENT</div>
+  </main>
+  <section id="game-ui" class="game-ui hidden">
+    <div class="hud-top"><div class="mode-tag"><span class="live-dot"></span><span id="mode-label">FREE ROAM</span><b>HONG KONG / 09</b></div><div class="weather"><span id="weather-icon">☁</span><span id="weather-label">MONSOON DRIZZLE</span><span class="separator"></span><span id="time-label">02:17 AM</span></div><button id="return-menu" class="hud-button">Ⅱ <span>PAUSE</span></button></div>
+    <div class="combat-hud"><div class="titan-card player-card"><div class="card-head"><span>YOUR TITAN</span><b id="player-name">GODZILLA 2019</b></div><div class="health-track"><i id="player-health"></i></div><div class="card-meta"><span>VITALITY</span><span id="player-hp-text">100%</span></div><div class="energy-track"><i id="player-energy"></i></div><div class="card-meta"><span>ATOMIC ENERGY</span><span id="player-energy-text">100%</span></div></div><div class="battle-center" id="battle-center"><div class="versus">VS</div><div class="target-name" id="target-name">KONG 2017</div><div class="target-health"><i id="target-health"></i></div><span class="target-hp">RIVAL VITALITY</span></div><div class="objective" id="objective"><span class="objective-icon">◎</span><span><b>OPEN SANDBOX</b><small>Explore. Fight. Flatten the district.</small></span></div></div>
+    <div class="toast" id="toast">DISTRICT DAMAGE +120</div>
+    <div class="bottom-hud"><div class="control-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>MOVE</span><i></i><kbd>SHIFT</kbd><span>SPRINT</span></div><div class="ability-row"><button data-action="light"><kbd>J</kbd><span>STRIKE</span><i>01</i></button><button data-action="heavy"><kbd>K</kbd><span>HEAVY</span><i>02</i></button><button data-action="special"><kbd>L</kbd><span>SPECIAL</span><i>03</i></button><button data-action="roar"><kbd>R</kbd><span>ROAR</span><i>04</i></button><button data-action="dodge"><kbd>SPACE</kbd><span>DODGE</span><i>05</i></button></div><div class="map-chip"><span class="map-dot"></span><b>VICTORIA HARBOUR</b><small>32°N 114°E</small></div></div>
+    <div class="touch-controls"><button data-action="light">HIT</button><button data-action="heavy">HEAVY</button><button data-action="special">SPECIAL</button><button data-action="roar">ROAR</button></div>
+  </section>
+  <aside id="sandbox-panel" class="side-panel hidden"><button class="panel-close" data-close>×</button><div class="eyebrow">CREATOR MODE</div><h2>SANDBOX</h2><p>Set the scale. Make a little chaos.</p><label>SPAWN TITAN<select id="spawn-select"></select></label><button id="spawn-titan" class="panel-action">＋ SPAWN TITAN</button><button id="spawn-building" class="panel-action secondary">＋ SPAWN BUILDING</button><div class="panel-divider"></div><label>ENVIRONMENT<select id="weather-select"><option>Monsoon Drizzle</option><option>Heavy Rain</option><option>Clear Night</option><option>Golden Hour</option><option>Blue Hour</option></select></label><label>TIME OF DAY<input id="time-slider" type="range" min="0" max="100" value="18"></label><button id="reset-city" class="panel-action secondary">↺ RESET DISTRICT</button><div class="panel-tip">TIP: CLICK OR TAP THE CITY TO MOVE YOUR TITAN</div></aside>
+  <aside id="collection-panel" class="side-panel hidden"><button class="panel-close" data-close>×</button><div class="eyebrow">FIELD GUIDE / 14 KNOWN</div><h2>TITAN INDEX</h2><p>Select a titan to take control.</p><div class="roster" id="roster"></div></aside>
+  <aside id="settings-panel" class="side-panel hidden"><button class="panel-close" data-close>×</button><div class="eyebrow">SYSTEM CONFIGURATION</div><h2>SETTINGS</h2><p>Tune the simulation to your liking.</p><label>CAMERA SENSITIVITY<input id="sensitivity" type="range" min="2" max="12" value="6"></label><label>GRAPHICS<select id="quality"><option>High</option><option>Balanced</option><option>Performance</option></select></label><label class="check-label"><input id="camera-shake" type="checkbox" checked> CINEMATIC CAMERA SHAKE</label><div class="panel-tip">WASD move · Mouse drag orbit · Scroll zoom<br>J strike · K heavy · L special · R roar · Space dodge</div></aside>
+  <div id="battle-setup" class="modal hidden"><button class="panel-close" data-close>×</button><div class="eyebrow">CUSTOM MATCH / 01</div><h2>CHOOSE YOUR TITAN</h2><div class="battle-selects"><label>PLAYER<select id="battle-player"></select></label><label>RIVAL<select id="battle-rival"></select></label></div><button id="start-battle" class="primary">START BATTLE <span>↗</span></button></div>
+  <div id="start-hint" class="start-hint hidden"><span>CLICK TO LOCK CAMERA</span><small>ESC TO RELEASE</small></div>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
