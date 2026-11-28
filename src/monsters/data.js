@@ -17,7 +17,7 @@ export const MonsterData = [
       light: 'Claw Swipe', heavy: 'Tail Slam', special: 'Atomic Breath',
       grab: 'Jaw Lock', roar: 'Alpha Roar', dodge: 'Weight Shift', jump: 'Seismic Stomp',
     },
-    special: { type: 'beam', name: 'Atomic Breath', damage: 34, cooldown: 9, range: 210, color: 0x8fe7ff, secondary: 0x2f7cff, desc: 'A focused torrent of nuclear plasma.' },
+    special: { type: 'beam', name: 'Atomic Breath', damage: 40, cooldown: 9, range: 245, color: 0x8fe7ff, secondary: 0x2f7cff, desc: 'A sustained torrent of nuclear plasma that burns through anything in its path.', beamDuration: 3.0, beamWidth: 1.55, beamTick: 0.11, beamDamage: 0.32, beamBuilding: 2.4, beamSplashRadius: 13, beamSplash: 1.1, beamShake: 0.16, beamStatus: 'burn' },
     combo: ['light', 'light', 'heavy'],
   },
   {
@@ -57,7 +57,7 @@ export const MonsterData = [
       light: 'Claw Swipe', heavy: 'Tail Slam', special: 'Atomic Breath',
       grab: 'Jaw Lock', roar: 'King\'s Roar', dodge: 'Weight Shift', jump: 'Seismic Stomp',
     },
-    special: { type: 'beam', name: 'Atomic Breath', damage: 38, cooldown: 9, range: 230, color: 0x9feeff, secondary: 0x2f7cff, desc: 'Superheated atomic plasma, focused to a razor point.' },
+    special: { type: 'beam', name: 'Atomic Breath', damage: 46, cooldown: 9, range: 270, color: 0x9feeff, secondary: 0x2f7cff, desc: 'Superheated atomic plasma, held on target until steel and stone give way.', beamDuration: 3.2, beamWidth: 1.65, beamTick: 0.105, beamDamage: 0.32, beamBuilding: 2.6, beamSplashRadius: 15, beamSplash: 1.2, beamShake: 0.18, beamStatus: 'burn' },
     combo: ['light', 'light', 'heavy'],
   },
   {
@@ -77,7 +77,7 @@ export const MonsterData = [
       light: 'Rending Claw', heavy: 'Tail Cleave', special: 'Spiral Breath',
       grab: 'Jaw Lock', roar: 'Evolution Roar', dodge: 'Blink Step', jump: 'Seismic Stomp',
     },
-    special: { type: 'beam', name: 'Spiral Atomic Breath', damage: 46, cooldown: 12, range: 260, color: 0xff7aa8, secondary: 0xb51bff, desc: 'A spiraling beam of unstable nuclear energy.' },
+    special: { type: 'beam', name: 'Spiral Atomic Breath', damage: 56, cooldown: 12, range: 300, color: 0xff7aa8, secondary: 0xb51bff, desc: 'A spiraling column of unstable nuclear energy that keeps boring through its target.', beamDuration: 3.5, beamWidth: 1.8, beamTick: 0.1, beamDamage: 0.33, beamBuilding: 2.8, beamSplashRadius: 17, beamSplash: 1.3, beamShake: 0.22, beamStatus: 'burn' },
     combo: ['light', 'light', 'heavy'],
   },
   {
@@ -177,7 +177,7 @@ export const MonsterData = [
       light: 'Talon Rake', heavy: 'Tail Lash', special: 'Gravity Beams',
       grab: 'Triple Bite', roar: 'Titan Call', dodge: 'Wing Gust', jump: 'Wing Slam',
     },
-    special: { type: 'tripleBeam', name: 'Gravity Beams', damage: 44, cooldown: 10, range: 250, color: 0xffe27a, secondary: 0xffb300, desc: 'Three crackling gravity beams fired from all three heads.' },
+    special: { type: 'tripleBeam', name: 'Gravity Beams', damage: 52, cooldown: 10, range: 285, color: 0xffe27a, secondary: 0xffb300, desc: 'Three sustained gravity beams that hammer the target from all three heads.', beamDuration: 3.4, beamWidth: 1.3, beamTick: 0.11, beamDamage: 0.12, beamPerBeamTick: true, beamBuilding: 2.2, beamSplashRadius: 16, beamSplash: 1.2, beamShake: 0.2 },
     combo: ['light', 'heavy', 'light'],
   },
   {

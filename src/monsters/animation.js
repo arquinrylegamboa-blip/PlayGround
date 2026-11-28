@@ -166,11 +166,23 @@ function applyHeavy(rig, p, family, def) {
   }
 }
 
-function applySpecial(rig, p, def) {
+function applySpecial(rig, p, def, atk) {
   const type = def.special.type;
-  const w = smooth(clamp01(p / 0.35));
-  const fire = smooth(clamp01((p - 0.35) / 0.15));
-  const rec = smooth(clamp01((p - 0.72) / 0.28));
+  const beam = type === 'beam' || type === 'tripleBeam' || type === 'freezeBeam' || type === 'godrays';
+  let w, fire, rec;
+  if (beam && atk) {
+    const t = atk.t;
+    const dur = Math.max(0.5, atk.dur);
+    const wind = Math.min(0.42, dur * 0.35);
+    const recStart = Math.max(wind + 0.15, dur - 0.42);
+    w = smooth(clamp01(t / wind));
+    fire = smooth(clamp01((t - wind) / 0.12));
+    rec = smooth(clamp01((t - recStart) / (dur - recStart)));
+  } else {
+    w = smooth(clamp01(p / 0.35));
+    fire = smooth(clamp01((p - 0.35) / 0.15));
+    rec = smooth(clamp01((p - 0.72) / 0.28));
+  }
   const jawOpen = Math.max(w * 0.7, fire * 0.9) * (1 - rec * 0.4);
   rot(rig, rig.jaw, jawOpen * 0.75, 0, 0);
   if (type === 'beam' || type === 'tripleBeam' || type === 'freezeBeam' || type === 'godrays') {
@@ -439,7 +451,7 @@ export function animateMonster(rig, state, time, dt) {
     switch (atk.kind) {
       case 'light': applyPunch(rig, p, family, atk.alt); break;
       case 'heavy': applyHeavy(rig, p, family, rig.def); break;
-      case 'special': applySpecial(rig, p, rig.def); break;
+      case 'special': applySpecial(rig, p, rig.def, atk); break;
       case 'roar': applyRoar(rig, p, family); break;
       case 'bite':
         rot(rig, rig.neck, -0.35 * Math.sin(p * Math.PI), 0, 0);

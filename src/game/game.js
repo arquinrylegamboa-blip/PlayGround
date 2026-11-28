@@ -483,23 +483,25 @@ export class Game {
   }
 
   beamDamage(monster, res, sp, beam) {
-    const dmg = sp.damage * 0.28;
-    const type = sp.type === 'freezeBeam' ? 'freeze' : 'impact';
+    const dmg = sp.damage * (sp.beamDamage ?? 0.28);
+    const type = sp.beamStatus ?? (sp.type === 'freezeBeam' ? 'freeze' : 'impact');
     if (res.monster) {
       const dir = res.monster.root.position.clone().sub(monster.root.position).setY(0).normalize();
-      const dealt = res.monster.takeDamage(dmg, monster, res.point, 6, type);
+      const dealt = res.monster.takeDamage(dmg, monster, res.point, sp.beamForce ?? 6, type);
       if (monster === this.player) this.stats.damageDealt += dealt;
-      this.effects.sparks(res.point, 6, sp.color, 12);
+      this.effects.sparks(res.point, Math.round(6 + (sp.beamWidth ?? 1) * 2), sp.color, 12);
     } else if (res.building) {
-      res.building.damage(dmg * 1.5, res.point, { source: monster });
+      res.building.damage(dmg * (sp.beamBuilding ?? 1.5), res.point, { source: monster });
       this.effects.glass(res.point, 5);
       this.effects.dust(res.point, 3, 4, 0x9a8f80);
+      if (type === 'burn') this.effects.fire(res.point, 3, sp.color, 1.4);
     } else {
-      this.city.damageAt(res.point, 9, dmg * 0.8, { source: monster });
+      this.city.damageAt(res.point, sp.beamSplashRadius ?? 9, dmg * (sp.beamSplash ?? 0.8), { source: monster });
       this.effects.dust(res.point, 5, 4, 0x9a8f80);
+      if (type === 'burn') this.effects.fire(res.point, 2, sp.color, 1.2);
     }
     if (sp.type === 'freezeBeam') this.effects.ice(res.point, 5);
-    if (monster === this.player) this.effects.shakeCamera(0.1, 0.2);
+    if (monster === this.player) this.effects.shakeCamera(sp.beamShake ?? 0.1, 0.2);
   }
 
   cycleWeather() {

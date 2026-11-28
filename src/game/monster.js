@@ -7,6 +7,9 @@ const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const damp = (v, target, lambda, dt) => v + (target - v) * (1 - Math.exp(-lambda * dt));
+const BEAM_TYPES = new Set(['beam', 'tripleBeam', 'freezeBeam', 'godrays']);
+const isBeamSpecial = (sp) => BEAM_TYPES.has(sp?.type);
+const beamAttackDuration = (sp) => sp?.beamDuration ?? (isBeamSpecial(sp) ? 1.8 : 1.15);
 
 function attackStats(def) {
   const a = def.attack / 100;
@@ -107,7 +110,7 @@ class MonsterAI {
     if (m.hp < m.maxHp * 0.28 && Math.random() < 0.15) intent.roar = true;
 
     const special = m.def.special;
-    const specialRange = special.type === 'beam' || special.type === 'tripleBeam' || special.type === 'freezeBeam' || special.type === 'godrays' ? special.range * 0.7 : special.range;
+    const specialRange = isBeamSpecial(special) ? special.range * 0.7 : special.range;
     if (m.cooldowns.special <= 0 && m.stamina > 28 && dist < specialRange && Math.random() < 0.5) {
       intent.special = true;
     }
@@ -464,7 +467,7 @@ export class Monster {
     this.stamina -= 24;
     this.cooldowns.special = sp.cooldown;
     this.state.attack = {
-      kind: 'special', t: 0, dur: sp.type === 'beam' || sp.type === 'tripleBeam' || sp.type === 'freezeBeam' || sp.type === 'godrays' ? 1.8 : 1.15,
+      kind: 'special', t: 0, dur: beamAttackDuration(sp),
       hit: 0.42, hitDone: false, special: sp, stats: { damage: sp.damage, range: sp.range, force: 20 }, aimYaw,
     };
     this.game.audio.roar(this.def);
@@ -580,9 +583,10 @@ export class Monster {
     const dir = aimFrom(head);
     a.beamAim = aimMonster;
     if (sp.type === 'beam' || sp.type === 'freezeBeam') {
-      const beam = this.game.spawnBeam(this, head, dir, sp, 1.25, this.isPlayer ? 2.6 : 2.2);
+      const hold = sp.beamHold ?? sp.beamDuration ?? (this.isPlayer ? 2.6 : 2.2);
+      const beam = this.game.spawnBeam(this, head, dir, sp, sp.beamWidth ?? 1.25, hold);
       this.activeBeams.push(beam);
-      this.beamStop = this.game.audio.beamStart(this.def, 1.4);
+      this.beamStop = this.game.audio.beamStart(this.def, sp.beamDuration ?? 1.4);
       this.game.effects.explosion(head, 0.35, sp.color);
       this.game.hud?.cinematic(this, 1.0);
     } else if (sp.type === 'tripleBeam') {
@@ -590,10 +594,11 @@ export class Monster {
       if (this.rig.necks) for (const n of this.rig.necks) {
         const p = new THREE.Vector3(); n.head.getWorldPosition(p); origins.push(p);
       } else origins.push(head);
+      const hold = sp.beamHold ?? sp.beamDuration ?? 1.6;
       for (const o of origins) {
-        this.activeBeams.push(this.game.spawnBeam(this, o, aimFrom(o), sp, 1.15, 1.6, 0.4));
+        this.activeBeams.push(this.game.spawnBeam(this, o, aimFrom(o), sp, sp.beamWidth ?? 1.15, hold, 0.4));
       }
-      this.beamStop = this.game.audio.beamStart(this.def, 1.4);
+      this.beamStop = this.game.audio.beamStart(this.def, sp.beamDuration ?? 1.4);
       this.game.hud?.cinematic(this, 1.0);
     } else if (sp.type === 'godrays') {
       const origins = [head.clone().add(new THREE.Vector3(-this.height * 0.18, 0, 0)), head, head.clone().add(new THREE.Vector3(this.height * 0.18, 0, 0))];
@@ -627,7 +632,8 @@ export class Monster {
   updateSpecial(dt, a) {
     const sp = a.special;
     if (!this.activeBeams.length) return;
-    a.tick = (a.tick || 0) - dt;
+    const perBeamTick = !!sp.beamPerBeamTick;
+    if (!perBeamTick) a.tick = (a.tick || 0) - dt;
     // update beam ends each frame
     const head = this.headWorld(new THREE.Vector3());
     for (const beam of this.activeBeams) {
@@ -643,8 +649,14 @@ export class Monster {
       beam.effect.end.copy(res.point);
       beam.effect.start.copy(origin);
       beam.effect.updateStart = (v) => { v.copy(origin); };
-      if (a.tick <= 0) {
-        a.tick = 0.12;
+      if (perBeamTick) {
+        beam.tick = (beam.tick ?? 0) - dt;
+        if (beam.tick <= 0) {
+          beam.tick = sp.beamTick ?? 0.12;
+          this.game.beamDamage(this, res, sp, beam);
+        }
+      } else if (a.tick <= 0) {
+        a.tick = sp.beamTick ?? 0.12;
         this.game.beamDamage(this, res, sp, beam);
       }
     }
